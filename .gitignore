@@ -1,0 +1,4 @@
+__pycache__/
+.env
+*.pyc
+RTX4090_FE_tracker.egg-info

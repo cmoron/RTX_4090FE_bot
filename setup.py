@@ -9,6 +9,7 @@ setup(
         'python-dotenv',
         'pytest',
         'requests-mock',
+        'nest_asyncio',
     ],
     entry_points={
         'console_scripts': [

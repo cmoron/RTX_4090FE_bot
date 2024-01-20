@@ -1,49 +1,37 @@
-#!/usr/bin/env python3
-
 import os
+import asyncio
 import discord
+import nest_asyncio
 from discord.ext import commands
 from dotenv import load_dotenv
+from bot.rtxbot import RTXBot
 
-def main():
+async def main():
     """
-    The main function that initializes and runs the Discord bot.
+    The main asynchronous function to run the RTXBot.
 
-    It loads the necessary environment variables, sets up the Discord intents,
-    initializes the bot with a command prefix, and runs the bot using the token
-    from the environment variables.
+    This function loads the necessary environment variables, initializes the Discord bot
+    with the specified intents, adds the RTXBot cog to the bot, and then starts the bot.
+
+    The bot uses a specific token for authentication and an API URL to check
+    the stock availability of NVIDIA RTX 4090.
     """
 
     load_dotenv()
     token = os.getenv('DISCORD_TOKEN')
+    url = "https://api.nvidia.partners/edge/product/search?page=1&limit=9&locale=fr-fr&gpu=RTX%204090&category=GPU,DESKTOP&manufacturer=NVIDIA&manufacturer_filter=NVIDIA~1,GIGABYTE~1"
 
     intents = discord.Intents.default()
     intents.messages = True
     intents.message_content = True
 
     bot = commands.Bot(command_prefix='!', intents=intents)
+    await bot.add_cog(RTXBot(token, bot, url))
+    await bot.run(token)
 
-    @bot.event
-    async def on_ready():
-        """
-        An asynchronous event that triggers when the bot is ready.
-
-        Prints a message to the console indicating that the bot has successfully started.
-        """
-        print(f'{bot.user.name} started.')
-
-    @bot.command()
-    async def hello(ctx):
-        """
-        An asynchronous command that sends a greeting message.
-
-        When a user types '!hello' in a Discord channel, the bot responds with "Hello!".
-        Args:
-            ctx: The context under which the command is executed.
-        """
-        await ctx.send("Hello!")
-
-    bot.run(token)
-
-if __name__ == "__main__":
-    main()
+def run_main():
+    """
+    Program entry point.
+    """
+    nest_asyncio.apply()
+    asyncio.run(main())

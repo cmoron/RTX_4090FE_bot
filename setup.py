@@ -7,10 +7,12 @@ setup(
     install_requires=[
         'discord.py',
         'python-dotenv',
+        'pytest',
+        'requests-mock',
     ],
     entry_points={
         'console_scripts': [
-            'rtx_4090fe_bot=bot.main:main'
+            'rtx_4090fe_bot=bot.main:run_main'
         ]
     }
 )

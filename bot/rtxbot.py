@@ -57,14 +57,10 @@ class RTXBot(commands.Cog):
             print("Channel is none, exit check_stock_periodically")
             return
 
-        await self.channel.send("Checking stock periodically from now...")
-
         product_info = await self.check_stock()
 
         if isinstance(product_info, str):
-            print(product_info)
             return
-        print(product_info, product_info.get('productAvailable'), self.last_status)
         if product_info and product_info.get('productAvailable') != self.last_status:
             self.last_status = "Available" if product_info.get('productAvailable') else "Out of Stock"
             product_title = product_info.get('productTitle', 'Unknown Product')
@@ -89,6 +85,7 @@ class RTXBot(commands.Cog):
         await ctx.send(f'Hello {ctx.author.mention}!')
         self.channel = ctx.channel
         if not self.check_stock_periodically.is_running():
+            await ctx.send(f'Check stock is launched.')
             self.check_stock_periodically.start()
 
     @commands.Cog.listener()
